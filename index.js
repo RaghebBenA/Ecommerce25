@@ -1,32 +1,31 @@
 const express = require("express");
+const cookiesSession = require("cookie-session");
 const passport = require("passport");
-const GoogleStartegy = require("passport-google-oauth20").Strategy;
+const mongoose = require("mongoose");
 const keys = require("./config/keys");
+require("./models/User");
+require("./services/passport");
+
+mongoose
+  .connect(keys.mongoURI, { useNewUrlParser: true })
+  .then(() => {
+    console.log("connect to db");
+  })
+  .catch((err) => console.log("error to connect to db", err));
 
 const app = express();
 
-passport.use(
-  new GoogleStartegy(
-    {
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecrect,
-      callbackURL: "/auth/google/callback"
-    },
-    (accessToken,refrechToken,profile,done) => {
-      console.log('access',accessToken);
-      console.log('refrechtoken',refrechToken)
-      console.log('profile',profile)
-    }
-  )
-);
-
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"]
+app.use(
+  cookiesSession({
+    maxAge: 30 * 40 * 60 * 1000,
+    keys: [keys.cookieKey]
   })
 );
-app.get("/auth/google/callback", passport.authenticate("google"));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require("./routes/authRoutes")(app);
 
 const PORT = process.env.PORT || 5000;
 
