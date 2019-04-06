@@ -1,0 +1,24 @@
+.bg-image{
+   
+    background: url('../Asset/backgroundCar.jpg') no-repeat ;
+    min-height: 380px;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  /* Needed to position the navbar */
+  position: relative;
+}
+
+.header-site{
+    overflow: hidden;
+  
+}
+
+.landingPage{
+    position: absolute;
+    margin: 20px;
+    width: auto;
+}
