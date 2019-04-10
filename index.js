@@ -3,10 +3,12 @@ const cookiesSession = require("cookie-session");
 const passport = require("passport");
 const mongoose = require("mongoose");
 const keys = require("./config/keys");
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 require("./models/User");
 require("./models/Cars");
 require("./services/passport");
+
+const CarRoutes = require("./routes/singleCarRoutes");
 
 mongoose
   .connect(keys.mongoURI, { useNewUrlParser: true })
@@ -16,20 +18,28 @@ mongoose
   .catch((err) => console.log("error to connect to db", err));
 
 const app = express();
-
+const router = express.Router();
+router.use(bodyParser.json());
 app.use(bodyParser.json());
 app.use(
   cookiesSession({
-    maxAge: 30 * 40 * 60 * 1000,
+    maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey]
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/api/cars", CarRoutes);
 
 require("./routes/authRoutes")(app);
 require("./routes/carsRoutes")(app);
+
+if (process.env.PORT === "production") {
+  app.use(express.static("client/build"));
+
+  resizeBy.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+}
 
 const PORT = process.env.PORT || 5000;
 

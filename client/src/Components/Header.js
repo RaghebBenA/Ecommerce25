@@ -1,14 +1,13 @@
 import React from "react";
 import { Navbar } from "react-bootstrap";
 
-const Header = ({renderContent}) => {
+const Header = ({ renderContent }) => {
   return (
-    <Navbar className="header-site">
-      <Navbar.Brand style={{ color: "white" }}>Ecommerce25</Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse className="justify-content-end">
-        {renderContent}
-      </Navbar.Collapse>
+    <Navbar className=" bg-dark">
+      <Navbar.Brand href="/"  style={{textDecoration:"none",color:"white"}}>
+        Ecommerce25
+      </Navbar.Brand>
+      <Navbar.Collapse className="justify-content-end">{renderContent}</Navbar.Collapse>
     </Navbar>
   );
 };

@@ -4,8 +4,6 @@ import _ from "lodash";
 import { DISPLAYCARS } from "./carouselDisplay";
 
 class LandingPage extends Component {
-
-
   renderContent() {
     return _.map(DISPLAYCARS, (Cars) => {
       return (
@@ -25,25 +23,24 @@ class LandingPage extends Component {
   }
   render() {
     return (
-      <div className="landingPage" style={{ color: "white" }}>
-        <Row>
-          <Col md={6}>
-            <h1> The best Cars are here </h1>
-            <h3>
-              Welcome Ecommerce25 Everyone need a car in nowadays here we have
-              all the types and all the taste so i think you will find your
-              wanted car here
-            </h3>
-          </Col>
-          <Col md={{ span: 4, offset: 4 }}>
+      <div>
+        <Row className="mt-1">
+          <Col   md={{ span: 4, offset: 4 }}>
             <Carousel>{this.renderContent()}</Carousel>
           </Col>
+        </Row>
+        <Row
+          className="mt-1 mx-auto"
+          style={{
+            display: "flex-box",
+            justifyContent: "center"
+          }}
+        >
+          {this.props.renderCars}
         </Row>
       </div>
     );
   }
 }
 
-
-
-export default LandingPage
+export default LandingPage;
