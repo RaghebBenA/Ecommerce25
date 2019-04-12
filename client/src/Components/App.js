@@ -10,10 +10,8 @@ import Purchaselist from "./PurchaseList";
 import "./Style.css";
 import Loading from "./Loader";
 import CarDetails from "./CarDetails";
-import Products from "./Product"
-
-
-
+import Products from "./CMS/Product";
+import CarNew from "./CMS/NewCar";
 
 class App extends Component {
   constructor(props) {
@@ -29,37 +27,49 @@ class App extends Component {
   renderCars() {
     return _.map(this.props.Cars, ({ name, _id, price, image }) => {
       return (
-        <Card
-          style={{ width: "18rem", padding: "10px" }}
-          className="text-center mt-1 ml-1"
-          key={_id}
-          bg="secondary"
-        >
-          <Card.Img variant="top" src={image} />
-
-          <Card.Body>
-            <Card.Title>{name}</Card.Title>
-            <Card.Subtitle>
-              {price}{" "}
-              <button
-                className="btn btn-light"
-                style={{ borderRadius: "50%" }}
-                onClick={() => {
-                  this.setState = {
-                    purchase: this.state.purchase.push({
-                      name,
-                      _id,
-                      price,
-                      image
-                    })
-                  };
+        <div className="card-container">
+          <div className="card-body">
+            <div className="container-fluid">
+              <Card
+                style={{
+                  width: "18rem",
+                  minHeight: "300px",
+                  padding: "10px",
+                  backgroundColor: "#FFF8E1"
                 }}
+                className="text-center mt-1 ml-1 "
+                key={_id}
               >
-                <i className="medium material-icons">local_grocery_store</i>
-              </button>
-            </Card.Subtitle>
-          </Card.Body>
-        </Card>
+                <Card.Img variant="top" src={image} />
+
+                <Card.Body>
+                  <Card.Title>{name}</Card.Title>
+                  <Card.Subtitle className="mt-1 ml-1">
+                    {price}{" "}
+                    <button
+                      className="btn btn-light"
+                      style={{ borderRadius: "50%" }}
+                      onClick={() => {
+                        this.setState = {
+                          purchase: this.state.purchase.push({
+                            name,
+                            _id,
+                            price,
+                            image
+                          })
+                        };
+                      }}
+                    >
+                      <i className="medium material-icons">
+                        local_grocery_store
+                      </i>
+                    </button>
+                  </Card.Subtitle>
+                </Card.Body>
+              </Card>
+            </div>
+          </div>
+        </div>
       );
     });
   }
@@ -74,14 +84,15 @@ class App extends Component {
         return (
           <Nav>
             <Nav.Item>
-            <NavLink to={`/product`}>
-            Product
-            </NavLink>{" "}
+              <NavLink to={`/product`}>Product</NavLink>{" "}
               <NavLink
                 to="/purchase"
                 style={{ textDecoration: "none", fontSize: "12px" }}
               >
-                <button className="btn btn-success btn-sm">
+                <button
+                  className="btn  btn-sm"
+                  style={{ backgroundColor: "#FFF8E1" }}
+                >
                   Purchase
                   <i className="small material-icons">
                     local_grocery_store
@@ -112,13 +123,14 @@ class App extends Component {
           path="/"
           component={() => <Homepage Cars={this.props.Cars} />}
         />
-        <Route exact path="/product" component={()=><Products Cars={this.props.Cars} />} />
+        <Route exact path="/product" component={() => <Products />} />
         <Route
           exact
           path="/purchase"
           component={() => <Purchaselist soldCars={this.state.purchase} />}
         />
         <Route exact path="/product/:carId" component={CarDetails} />
+        <Route exact path="/New" component={CarNew} />
       </BrowserRouter>
     );
   }

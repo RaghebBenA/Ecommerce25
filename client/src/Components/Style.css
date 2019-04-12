@@ -1,7 +1,12 @@
+.car{
+  transition: width 5s ease ;
+}
 
+.car:hover{
+  transform: scale(1.1)
+}
 
 /* Style the header links */
-
 
 /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
 .header a.logo {

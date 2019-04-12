@@ -17,6 +17,7 @@ module.exports = (app) => {
       price,
       Carvin
     }).save();
+    res.send(cars)
     done(null, cars);
   });
 }

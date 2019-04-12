@@ -4,6 +4,7 @@ import _ from "lodash";
 import { DISPLAYCARS } from "./carouselDisplay";
 
 class LandingPage extends Component {
+  state = { activeItemIndex: 0 };
   renderContent() {
     return _.map(DISPLAYCARS, (Cars) => {
       return (
@@ -12,7 +13,7 @@ class LandingPage extends Component {
             className="d-block"
             src={Cars.car}
             alt="first slide"
-            style={{ maxHeight: "300px", objectFit: "cover" }}
+            style={{ maxHeight: "300px",minWidth:"600px", objectFit: "cover" }}
           />
           <Carousel.Caption>
             <h3>{Cars.title}</h3>
@@ -21,22 +22,24 @@ class LandingPage extends Component {
       );
     });
   }
+
   render() {
     return (
-      <div>
-        <Row className="mt-1">
-          <Col   md={{ span: 4, offset: 4 }}>
+      <div style={{backgroundColor: "#3949AB"}}>
+        <Row >
+          <Col md={{ span: 4, offset: 4 }} className="mt-1">
             <Carousel>{this.renderContent()}</Carousel>
           </Col>
         </Row>
+
         <Row
-          className="mt-1 mx-auto"
+          className="mt-1 mx-auto "
           style={{
             display: "flex-box",
             justifyContent: "center"
           }}
         >
-          {this.props.renderCars}
+        {this.props.renderCars}
         </Row>
       </div>
     );

@@ -8,13 +8,14 @@ export const fecthUser = () => async (dispatch) => {
   dispatch({ type: FETCH_USER, payload: res.data });
 };
 
-export const postCar = (values) => async (dispatch) => {
+export const postCar = (values,history) => async (dispatch) => {
   const res = await axios.post("/api/cars ", values);
+  history.push("/product");
   dispatch({ type: FETCH_CARS, payload: res.data });
 };
 
 export const fetchCars = () => async (dispatch) => {
-  const res = await axios.get("api/cars");
+  const res = await axios.get("/api/cars");
   dispatch({ type: FETCH_CARS, payload: res.data });
 };
 
