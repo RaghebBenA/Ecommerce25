@@ -29,7 +29,6 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-linkedin": "^1.0.0",
     "passport-linkedin-oauth2": "^1.6.1",
-    "path-parser": "^4.2.0",
-    "redux-thunk": "^2.3.0"
+    "path-parser": "^4.2.0"
   }
 }

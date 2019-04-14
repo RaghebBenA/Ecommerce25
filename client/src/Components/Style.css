@@ -42,3 +42,117 @@
     float: none;
   }
 }
+
+
+.cont{
+  width: 22%;
+  height: 55vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-cont{
+  width: 250px;
+  height: 303px;
+  
+}
+.cards{
+  width: 100%;
+  height: 100%;
+  transition: transform 1s ease-out;
+  transform-style: preserve-3d;
+ 
+}
+
+.card-cont:hover .cards{
+  transform: rotateY(180deg)
+
+}
+
+.cards figure{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin: 0;
+  border-radius: 5px;
+  display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: column
+}
+.cards .front{
+  background: #FFF8E1;
+  
+}
+
+.cards .back{
+  background: #FFF8E1;
+  transform: rotateY(180deg)
+}
+
+.page{
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0
+}
+
+.page-enter{
+  opacity: 0.01;
+  z-index: 1
+}
+
+.page-enter-active{
+  opacity: 1;
+
+  transition: all 300ms ease-in
+}
+
+.page-exit {
+  opacity: 10;
+
+}
+.page-exit-active {
+  opacity: 0.01;
+
+  transition: all 300ms ease-in
+}
+
+.carImg{
+  height: 150px ;
+  width: 250;
+}
+
+.theCars{
+  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
+@media screen and (max-width: 600px){
+
+  .cont{
+    width: 70%;
+    max-height: 50vh;
+    min-width: 40vh;
+    margin-top: 10px;
+    margin-bottom: 10px
+  }
+  .carImg{
+    width: 200px
+  }
+  .car{
+   height: 100%;
+   
+  }
+  .product{
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    
+  }
+}
+

@@ -11,7 +11,7 @@ class Products extends Component {
     this.props.fetchCars();
   }
   renderCars() {
-    return _.map(this.props.Cars, ({ name, _id, price, image }) => {
+    return _.map(this.props.Cars, ({ name, _id, price, image ,CarMaker,Carvin }) => {
       return (
         <Card
           key={_id}
@@ -35,9 +35,9 @@ class Products extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div >
         <h1>All The products of The sum: {this.props.Cars.length} </h1>
-        <div className="d-flex justify-content-center">{this.renderCars()}</div>
+        <div className="d-flex justify-content-center product" >{this.renderCars()}</div>
         <div className="fixed-action-btn">
           <Link to="/New">
             <Button animated floated="right" className="ml-1 mt-1">
