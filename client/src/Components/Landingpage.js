@@ -27,7 +27,9 @@ class LandingPage extends Component {
     });
   }
 
+
   render() {
+ 
     return (
       <div style={{ backgroundColor: "#3949AB" }}>
         <Row >
@@ -43,7 +45,9 @@ class LandingPage extends Component {
             justifyContent: "center",
           }}
         >
+  
           {this.props.renderCars}
+ 
         </Row>
       
       </div>

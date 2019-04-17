@@ -2,6 +2,8 @@ import {combineReducers} from "redux"
 import authReducer from "./authReducer"
 import carReducer from "./carReducer"
 import oneCarReducer from "./oneCarReducer"
+import deleteCarReducer from "./deleteCarReducer"
+import updateCarReducer from "./updateCarReducer"
 import { reducer as reduxForm } from 'redux-form';
  
 export default combineReducers({
@@ -9,5 +11,7 @@ export default combineReducers({
     form:  reduxForm,
     Cars: carReducer,
     Onecar : oneCarReducer,
+    CarRm: deleteCarReducer,
+    CarPut: updateCarReducer
    
 })

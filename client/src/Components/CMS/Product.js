@@ -11,7 +11,7 @@ class Products extends Component {
     this.props.fetchCars();
   }
   renderCars() {
-    return _.map(this.props.Cars, ({ name, _id, price, image ,CarMaker,Carvin }) => {
+    return _.map(this.props.Cars, ({ name, _id, price, image }) => {
       return (
         <Card
           key={_id}
@@ -34,19 +34,26 @@ class Products extends Component {
     });
   }
   render() {
+   
     return (
-      <div >
+      <div>
         <h1>All The products of The sum: {this.props.Cars.length} </h1>
-        <div className="d-flex justify-content-center product" >{this.renderCars()}</div>
-        <div className="fixed-action-btn">
-          <Link to="/New">
-            <Button animated floated="right" className="ml-1 mt-1">
-              <Button.Content visible>Next</Button.Content>
-              <Button.Content hidden>
-                <Icon name="arrow right" />
-              </Button.Content>
-            </Button>
-          </Link>
+        <div className="container">
+        
+            <div className="d-flex justify-content-center product">
+              {this.renderCars()}
+            </div>
+        
+          <div className="fixed-action-btn">
+            <Link to="/New">
+              <Button animated floated="right" className="ml-1 mt-1">
+                <Button.Content visible>New Car</Button.Content>
+                <Button.Content hidden>
+                  <Icon name="arrow right" />
+                </Button.Content>
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );

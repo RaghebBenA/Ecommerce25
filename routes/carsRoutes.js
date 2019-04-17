@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Cars = mongoose.model("cars");
+const requireLogin = require("../middelware/requireLogin");
 
 
 module.exports = (app) => {
@@ -8,7 +9,7 @@ module.exports = (app) => {
     res.send(cars);
   });
 
-  app.post("/api/cars", async (req, res, done) => {
+  app.post("/api/cars", requireLogin,async (req, res, done) => {
     const { name, carMaker, image, price, Carvin } = req.body;
     const cars = await new Cars({
       name,

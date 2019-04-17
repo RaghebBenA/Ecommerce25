@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import CarFields from "./carFields";
 import FIELDS from "./formFields";
 import _ from "lodash";
@@ -25,7 +26,29 @@ class CarForm extends Component {
       <div className="container">
         <form onSubmit={this.props.handleSubmit(this.props.onCarCreate)}>
           {this.renderFields()}
-          <Button type="submit">Try</Button>
+          <Link to="/product">
+            {" "}
+            <Button
+              style={{
+                backgroundColor: "#EF9A9A",
+                color: "#3949AB",
+                fontWeight: "bold"
+              }}
+            >
+              Cancel
+            </Button>
+          </Link>
+          <Button
+            type="submit"
+            style={{
+              backgroundColor: "#EEFF41",
+              color: "#3949AB",
+              fontWeight: "bold"
+            }}
+            className="float-right"
+          >
+            Next
+          </Button>
         </form>
       </div>
     );

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Switch, Route, NavLink } from "react-router-dom";
+import { Switch, Route, NavLink, Link } from "react-router-dom";
 import * as actions from "../redux/actions";
 import { connect } from "react-redux";
-import { Navbar, Nav } from "react-bootstrap";
+import { Nav, Button } from "react-bootstrap";
+import { Dropdown, Divider } from "semantic-ui-react";
 import _ from "lodash";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Header from "./Header";
@@ -17,7 +18,7 @@ import CarNew from "./CMS/NewCar";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { purchase: [], count: [] };
+    this.state = { purchase: [] };
   }
 
   componentDidMount() {
@@ -26,13 +27,14 @@ class App extends Component {
   }
 
   renderCars() {
-    return _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
+    
+return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
       return (
         <div className="cont" key={_id}>
           <div className="card-cont">
             <div className="cards">
               <figure className="front">
-                <img alt="img"  className="carImg"  src={image}  />
+                <img alt="img" className="carImg" src={image} />
                 <h1>{name}</h1>
                 <p>{carMaker}</p>
               </figure>
@@ -54,12 +56,16 @@ class App extends Component {
                 >
                   <i className="medium material-icons">local_grocery_store</i>
                 </button>
+                <Divider horizontal>Or</Divider>
+                <Link to={`/product/${_id}`}>
+                  <Button variant="info">More Details</Button>
+                </Link>
               </figure>
             </div>
           </div>
         </div>
       );
-    });
+    }); 
   }
 
   renderContent() {
@@ -70,27 +76,34 @@ class App extends Component {
         return <a href="/auth/google">Login With google</a>;
       default:
         return (
-          <Nav style={{ justifyContent: "space-around" }}>
-            <Nav.Item>
-              <NavLink to={`/product`}>Product</NavLink>{" "}
-              <NavLink
-                to="/purchase"
-                style={{ textDecoration: "none", fontSize: "12px" }}
-              >
-                <button
-                  className="btn  btn-sm"
-                  style={{ backgroundColor: "#FFF8E1" }}
-                >
-                  Purchase
-                  <i className="small material-icons">
-                    local_grocery_store
-                  </i>{" "}
-                </button>
-              </NavLink>{" "}
-              <Navbar.Text style={{ color: "white" }}>
-                Signed in as: {this.props.auth.User}
-              </Navbar.Text>
-            </Nav.Item>
+          <Nav className="mr-5  ">
+            <NavLink
+              to={`/product`}
+              className="mr-3 mt-2 text-white"
+              style={{ fontSize: "14px" }}
+            >
+              Product
+            </NavLink>{" "}
+            <NavLink
+              to="/purchase"
+              style={{
+                textDecoration: "none",
+                fontSize: "14px",
+                color: "white"
+              }}
+              className="mr-3 mt-2"
+            >
+              Purchase
+              <i className="small material-icons">local_grocery_store</i>{" "}
+            </NavLink>{" "}
+            <Dropdown
+              text="Account"
+              style={{ color: "white", marginTop: "7px" }}
+            >
+              <Dropdown.Menu direction="left">
+                <Dropdown.Item text={this.props.auth.User} />
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav>
         );
     }
@@ -103,14 +116,13 @@ class App extends Component {
       }
       return <LandingPage renderCars={this.renderCars()} />;
     };
-
     return (
       <div>
         <Header renderContent={this.renderContent()} />
         <Route
-          render={({location}) => (
+          render={({ location }) => (
             <TransitionGroup>
-              <CSSTransition key={location.key}  classNames="page" timeout={300}>
+              <CSSTransition key={location.key} classNames="page" timeout={300}>
                 <Switch>
                   <Route
                     exact

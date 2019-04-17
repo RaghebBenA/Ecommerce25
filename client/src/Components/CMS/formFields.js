@@ -5,12 +5,12 @@ export default [
         noValueError: "You must provide a Car name "
       },
       {
-        label: "carMaker",
+        label: "Car Maker",
         name: "carMaker",
         noValueError: "You must provide a Car maker"
       },
       {
-        label: "car Image",
+        label: "Car Image",
         name: "image",
         noValueError: "You must provide a image For the Car"
       },
