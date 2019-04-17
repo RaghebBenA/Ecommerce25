@@ -14,7 +14,7 @@ CarRoutes.route("/:carId")
 
     res.send(car);
   })
-  .put(async (req, res) => {
+  .put(requireLogin,async (req, res) => {
     const id = new mongoose.Types.ObjectId(req.params.carId);
     const car = await Cars.findByIdAndUpdate(
       id,

@@ -69,11 +69,12 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
   }
 
   renderContent() {
+ 
     switch (this.props.auth) {
       case null:
         return;
       case false:
-        return <a href="/auth/google">Login With google</a>;
+        return <a href="/auth/google" style={{color:'white'}}>Login With google</a>;
       default:
         return (
           <Nav className="mr-5  ">
@@ -102,6 +103,7 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
             >
               <Dropdown.Menu direction="left">
                 <Dropdown.Item text={this.props.auth.User} />
+                <Dropdown.Item ><a href="/api/logout" style={{ textDecoration: "none" ,color:"black"}}>Logout</a></Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Nav>
