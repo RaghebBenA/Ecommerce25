@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const Cars = mongoose.model("cars");
 const requireLogin = require("../middelware/requireLogin");
+const requireAdmin  = require("../middelware/requireAdmin")
 
 const CarRoutes = express.Router();
 
@@ -14,7 +15,7 @@ CarRoutes.route("/:carId")
 
     res.send(car);
   })
-  .put(requireLogin,async (req, res) => {
+  .put(requireLogin,requireAdmin,async (req, res) => {
     const id = new mongoose.Types.ObjectId(req.params.carId);
     const car = await Cars.findByIdAndUpdate(
       id,
@@ -31,7 +32,7 @@ CarRoutes.route("/:carId")
     }
   })
 
-  .delete(requireLogin, async (req, res) => {
+  .delete(requireLogin,requireAdmin, async (req, res) => {
     const id = new mongoose.Types.ObjectId(req.params.carId);
     const car = await Cars.findByIdAndDelete(id);
 

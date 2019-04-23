@@ -14,6 +14,7 @@ import Loading from "./Loader";
 import CarDetails from "./CarDetails";
 import Products from "./CMS/Product";
 import CarNew from "./CMS/NewCar";
+import AdminPage from "./CMS/AdminLandingpage"
 
 class App extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class App extends Component {
 
   renderCars() {
     
-return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
+return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker,Carvin }) => {
       return (
         <div className="cont" key={_id}>
           <div className="card-cont">
@@ -49,7 +50,9 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
                         name,
                         _id,
                         price,
-                        image
+                        image,
+                        carMaker,
+                        Carvin
                       })
                     };
                   }}
@@ -78,13 +81,17 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
       default:
         return (
           <Nav className="mr-5  ">
+          { this.props.auth["Admin"] === true ?
             <NavLink
               to={`/product`}
               className="mr-3 mt-2 text-white"
               style={{ fontSize: "14px" }}
             >
               Product
-            </NavLink>{" "}
+            </NavLink>
+            : 
+            null
+          }
             <NavLink
               to="/purchase"
               style={{
@@ -112,11 +119,12 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
   }
 
   render() {
+   
     const Homepage = ({ Cars }) => {
       if (!Cars.length) {
         return <Loading />;
       }
-      return <LandingPage renderCars={this.renderCars()} />;
+      return <div> {this.props.auth["Admin"] === true ? <AdminPage /> :  <LandingPage renderCars={this.renderCars()} />}</div>
     };
     return (
       <div>
@@ -136,7 +144,7 @@ return  _.map(this.props.Cars, ({ name, _id, price, image, carMaker }) => {
                     exact
                     path="/purchase"
                     component={() => (
-                      <Purchaselist soldCars={this.state.purchase} />
+                      <Purchaselist soldCars={this.state.purchase} auth={this.props.auth} />
                     )}
                   />
                   <Route exact path="/product/:carId" component={CarDetails} />

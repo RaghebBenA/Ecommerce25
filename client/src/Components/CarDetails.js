@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { fetchOneCar, deleteOnecar } from "../redux/actions";
+import { fetchOneCar, fecthUser,deleteOnecar } from "../redux/actions";
 import { connect } from "react-redux";
 import { Card, Button } from "react-bootstrap";
 import updateFields from "./CMS/updateForm/updateFormFields"
@@ -20,6 +20,7 @@ class CarDetails extends Component {
   };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
+    this.props.fecthUser()
   }
   renderimg() {
     const { name, image } = this.props.Onecar;
@@ -92,6 +93,10 @@ class CarDetails extends Component {
                   />
                 ) : (
                   <div>
+                  { this.props.auth["Admin"] === false || !this.props.auth ?
+                  <div> {name} </div>
+                    :
+                    <div>
                     {name}
                     <Icon
                       name="pencil alternate"
@@ -101,18 +106,23 @@ class CarDetails extends Component {
                         this.setState({ open: true, fields: array[0] });
                       }}
                     />
-                  </div>
+                    </div>
+}                  </div>
                 )}
               </Card.Title>
               <Card.Subtitle>
-                {this.state.putprice ? (
+                {this.state.putprice  ? (
                   <UpdateCar
                     car={this.state.fields}
                     carId={this.props.match.params.carId}
                   />
                 ) : (
                   <div>
-                    Car price: {price}
+                  { this.props.auth["Admin"] === false || !this.props.auth ?
+                   <div>{price} </div>
+                   :
+                   <div>
+                   {price}
                     <Icon
                       name="pencil alternate"
                       size="small"
@@ -125,6 +135,8 @@ class CarDetails extends Component {
                       }}
                     />
                   </div>
+                  }
+                  </div>
                 )}
               </Card.Subtitle>
               {this.state.putvin ? (
@@ -133,8 +145,12 @@ class CarDetails extends Component {
                   carId={this.props.match.params.carId}
                 />
               ) : (
-                <div className="d-flex justify-content-center">
-                  <p>Vin: {Carvin}</p>
+                <div >
+                { this.props.auth["Admin"] === false || !this.props.auth ?
+                  <p>{Carvin}</p>
+                  :
+                  <div className="d-flex justify-content-center">
+                  <p>{Carvin}</p>
                   <Icon
                     name="pencil alternate"
                     size="small"
@@ -146,6 +162,8 @@ class CarDetails extends Component {
                       });
                     }}
                   />
+                  </div>
+                }
                 </div>
               )}
               <Card.Text>
@@ -155,6 +173,10 @@ class CarDetails extends Component {
                 condimentum nunc ac nisi vulputate fringilla. Donec lacinia
                 congue felis in faucibus
               </Card.Text>
+             {
+              this.props.auth["Admin"] === false || !this.props.auth ?
+              null 
+              : 
               <Button
                 onClick={() => {
                   this.props.deleteOnecar(
@@ -165,7 +187,7 @@ class CarDetails extends Component {
                 className="float-right"
               >
                 delete
-              </Button>
+              </Button>}
             </Card.Body>
           </Card>
         </div>
@@ -174,9 +196,9 @@ class CarDetails extends Component {
   }
 }
 
-const mapStateToprops = ({ Onecar, CarRm }) => ({ Onecar, CarRm });
+const mapStateToprops = ({ Onecar,auth ,CarRm }) => ({ Onecar,auth ,CarRm });
 
 export default connect(
   mapStateToprops,
-  { fetchOneCar, deleteOnecar }
+  { fetchOneCar, fecthUser,deleteOnecar }
 )(CarDetails);

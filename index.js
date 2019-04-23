@@ -6,9 +6,11 @@ const keys = require("./config/keys");
 const bodyParser = require("body-parser");
 require("./models/User");
 require("./models/Cars");
+require("./models/Purchase")
 require("./services/passport");
 
 const CarRoutes = require("./routes/singleCarRoutes");
+const AdminRoutes = require("./routes/adminRoutes")
 
 mongoose
   .connect(keys.mongoURI, { useNewUrlParser: true })
@@ -31,9 +33,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use("/api/cars", CarRoutes);
+app.use("/api/user",AdminRoutes)
 
 require("./routes/authRoutes")(app);
 require("./routes/carsRoutes")(app);
+require("./routes/purchaseRoutes")(app);
+
 
 if (process.env.NODE_ENV === "production") {
   // Express will serve up production assets
