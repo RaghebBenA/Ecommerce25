@@ -1,21 +1,16 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
 import _ from "lodash";
 
 class AdminPage extends Component {
-  componentDidMount() {
-    this.props.fetchCars();
-  }
   renderNames() {
-    return _.map(this.props.Cars, ({ name,_id }) => {
+    return _.map(this.props.Cars, ({ name, _id }) => {
       return (
-        <div 
-        key={_id}
+        <div
+          key={_id}
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+            paddingLeft: "10px",
             color: "white"
           }}
         >
@@ -24,19 +19,30 @@ class AdminPage extends Component {
       );
     });
   }
+
   render() {
     return (
-      <div>
-        <h1 style={{ color: "white" }}>AdminPage</h1>
-        {this.renderNames()}
+      <div className="container">
+        <div
+          style={{
+            border: "none",
+            boxSahdow: " 2px 1px 24px 24px rgba(230,230,230,1)",
+            borderRadius: "5px",
+            maxWidth: "400px",
+            backgroundColor: "white",
+            paddingLeft: "10px"
+          }}
+        >
+          <div className="row aling-items-start">
+            <h3 style={{paddingLeft: "10px"}}>Cars</h3>
+            </div>
+            <div className="row aling-items-center">
+            <h4 style={{paddingLeft: "10px"}}>Cars Number: {this.props.Cars.length}</h4>
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ Cars }) => ({ Cars });
-
-export default connect(
-  mapStateToProps,
-  actions
-)(AdminPage);
+export default AdminPage;

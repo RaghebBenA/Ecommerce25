@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
-import * as actions from "../../redux/actions";
+import * as actions from "../redux/actions";
 import { connect } from "react-redux";
-import { Button, Icon } from "semantic-ui-react";
+
 
 class Products extends Component {
   componentDidMount() {
@@ -43,17 +43,6 @@ class Products extends Component {
             <div className="d-flex justify-content-center product">
               {this.renderCars()}
             </div>
-        
-          <div className="fixed-action-btn">
-            <Link to="/New">
-              <Button animated floated="right" className="ml-1 mt-1">
-                <Button.Content visible>New Car</Button.Content>
-                <Button.Content hidden>
-                  <Icon name="arrow right" />
-                </Button.Content>
-              </Button>
-            </Link>
-          </div>
         </div>
       </div>
     );

@@ -1,26 +1,14 @@
 import React, { Component } from "react";
-import { fetchOneCar, fecthUser,deleteOnecar } from "../redux/actions";
+import { fetchOneCar } from "../redux/actions";
 import { connect } from "react-redux";
-import { Card, Button } from "react-bootstrap";
-import updateFields from "./CMS/updateForm/updateFormFields"
+import { Card } from "react-bootstrap";
 import ReactImageMagnify from "react-image-magnify";
 import audi from "../Asset/audi.jpg";
-import UpdateCar from "./CMS/updateForm/putForm";
 import { FadeTransform } from "react-animation-components";
-import { Icon } from "semantic-ui-react";
-
-
 
 class CarDetails extends Component {
-  state = {
-    fields: [],
-    open: false,
-    putprice: false,
-    putvin: false
-  };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
-    this.props.fecthUser()
   }
   renderimg() {
     const { name, image } = this.props.Onecar;
@@ -64,8 +52,6 @@ class CarDetails extends Component {
   }
   render() {
     const { name, price, Carvin } = this.props.Onecar;
-    let array = [];
-    updateFields(this.props.Onecar, array);
     return (
       <FadeTransform
         in
@@ -85,87 +71,9 @@ class CarDetails extends Component {
           <Card style={{ width: "25rem" }} className="text-center">
             {this.renderimg()}
             <Card.Body>
-              <Card.Title>
-                {this.state.open ? (
-                  <UpdateCar
-                    car={this.state.fields}
-                    carId={this.props.match.params.carId}
-                  />
-                ) : (
-                  <div>
-                  { this.props.auth["Admin"] === false || !this.props.auth ?
-                  <div> {name} </div>
-                    :
-                    <div>
-                    {name}
-                    <Icon
-                      name="pencil alternate"
-                      size="small"
-                      style={{ marginleft: "100%" }}
-                      onClick={() => {
-                        this.setState({ open: true, fields: array[0] });
-                      }}
-                    />
-                    </div>
-}                  </div>
-                )}
-              </Card.Title>
-              <Card.Subtitle>
-                {this.state.putprice  ? (
-                  <UpdateCar
-                    car={this.state.fields}
-                    carId={this.props.match.params.carId}
-                  />
-                ) : (
-                  <div>
-                  { this.props.auth["Admin"] === false || !this.props.auth ?
-                   <div>{price} </div>
-                   :
-                   <div>
-                   {price}
-                    <Icon
-                      name="pencil alternate"
-                      size="small"
-                      style={{ marginleft: "100%" }}
-                      onClick={() => {
-                        this.setState({
-                          putprice: true,
-                          fields: array[3]
-                        });
-                      }}
-                    />
-                  </div>
-                  }
-                  </div>
-                )}
-              </Card.Subtitle>
-              {this.state.putvin ? (
-                <UpdateCar
-                  car={this.state.fields}
-                  carId={this.props.match.params.carId}
-                />
-              ) : (
-                <div >
-                { this.props.auth["Admin"] === false || !this.props.auth ?
-                  <p>{Carvin}</p>
-                  :
-                  <div className="d-flex justify-content-center">
-                  <p>{Carvin}</p>
-                  <Icon
-                    name="pencil alternate"
-                    size="small"
-                    style={{ marginleft: "100%" }}
-                    onClick={() => {
-                      this.setState({
-                        putvin: true,
-                        fields: array[4]
-                      });
-                    }}
-                  />
-                  </div>
-                }
-                </div>
-              )}
+              <Card.Title>{name}</Card.Title>
+              <Card.Subtitle>{price}</Card.Subtitle>
+              <p>{Carvin}</p>
               <Card.Text>
                 Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
                 scelerisque ante sollicitudin commodo. Cras purus odio,
@@ -173,21 +81,6 @@ class CarDetails extends Component {
                 condimentum nunc ac nisi vulputate fringilla. Donec lacinia
                 congue felis in faucibus
               </Card.Text>
-             {
-              this.props.auth["Admin"] === false || !this.props.auth ?
-              null 
-              : 
-              <Button
-                onClick={() => {
-                  this.props.deleteOnecar(
-                    this.props.match.params.carId,
-                    this.props.history
-                  );
-                }}
-                className="float-right"
-              >
-                delete
-              </Button>}
             </Card.Body>
           </Card>
         </div>
@@ -196,9 +89,9 @@ class CarDetails extends Component {
   }
 }
 
-const mapStateToprops = ({ Onecar,auth ,CarRm }) => ({ Onecar,auth ,CarRm });
+const mapStateToprops = ({ Onecar }) => ({ Onecar });
 
 export default connect(
   mapStateToprops,
-  { fetchOneCar, fecthUser,deleteOnecar }
+  { fetchOneCar }
 )(CarDetails);

@@ -10,7 +10,7 @@ const Header = ({ renderContent }) => {
     >
       <Navbar.Brand>
         <Link style={{ textDecoration: "none", color: "white" }} to="/">
-          Ecommerce25
+         Ecommerce25
         </Link>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
