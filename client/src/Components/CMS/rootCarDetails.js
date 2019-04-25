@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { fetchOneCar, fecthUser, deleteOnecar } from "../../redux/actions";
+import { fetchOneCar,  deleteOnecar } from "../../redux/actions";
 import { connect } from "react-redux";
 import { Card, Button } from "react-bootstrap";
 import updateFields from "./updateForm/updateFormFields";
@@ -19,7 +19,6 @@ class RootCarDetails extends Component {
   };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
-    this.props.fecthUser();
   }
   componentWillReceiveProps(nextProps){
     if(this.props.Onecar !== nextProps.Onecar){
@@ -159,9 +158,9 @@ class RootCarDetails extends Component {
   }
 }
 
-const mapStateToprops = ({ Onecar, auth, CarRm }) => ({ Onecar, auth, CarRm });
+const mapStateToprops = ({ Onecar,  CarRm }) => ({ Onecar, CarRm });
 
 export default connect(
   mapStateToprops,
-  { fetchOneCar, fecthUser, deleteOnecar }
+  { fetchOneCar ,deleteOnecar }
 )(RootCarDetails);
