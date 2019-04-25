@@ -14,54 +14,25 @@ class RootCarDetails extends Component {
     fields: [],
     open: false,
     putprice: false,
-    putvin: false
+    putvin: false,
+    img: audi
   };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
     this.props.fecthUser();
   }
-  renderimg() {
-    const { name, image } = this.props.Onecar;
-    if (!this.props.Onecar) {
-      return (
-        <ReactImageMagnify
-          {...{
-            smallImage: {
-              alt: name,
-              isFluidWidth: true,
-              src: audi
-            },
-            largeImage: {
-              src: audi,
-              width: 1200,
-              height: 450
-            },
-            lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
-          }}
-        />
-      );
-    } else {
-      return (
-        <ReactImageMagnify
-          {...{
-            smallImage: {
-              alt: name,
-              isFluidWidth: true,
-              src: image
-            },
-            largeImage: {
-              src: image,
-              width: 1200,
-              height: 450
-            },
-            lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
-          }}
-        />
-      );
+  componentWillReceiveProps(nextProps){
+    if(this.props.Onecar !== nextProps.Onecar){
+      this.setState({
+        img: nextProps.Onecar.image
+      })
     }
   }
+ 
   render() {
-    const { name, price, Carvin } = this.props.Onecar;
+  
+    const { name, price, Carvin} = this.props.Onecar;
+    const {img} = this.state
     let array = [];
     updateFields(this.props.Onecar, array);
     return (
@@ -81,7 +52,21 @@ class RootCarDetails extends Component {
           className="d-flex justify-content-center"
         >
           <Card style={{ width: "25rem" }} className="text-center">
-            {this.renderimg()}
+          <ReactImageMagnify
+          {...{
+            smallImage: {
+              alt: name,
+              isFluidWidth: true,
+              src: img
+            },
+            largeImage: {
+              src: img,
+              width: 1200,
+              height: 450
+            },
+            lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
+          }}
+        />
             <Card.Body>
               <Card.Title>
                 {this.state.open ? (

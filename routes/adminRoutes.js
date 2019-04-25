@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const User = mongoose.model("users");
-const Key = require("../config/keys")
+const Key = require("../config/keys");
+const requireLogin = require("../middelware/requireLogin");
 
 const AdminRoutes = express.Router();
 
@@ -14,15 +15,15 @@ AdminRoutes.route("/:userId")
     res.send(user);
   })
   .put(async (req, res) => {
-    const reqCode = Object.values(req.body).toString()
-    if(reqCode === Key.adminKey){
-      const user = await User.updateOne(
+    const { Code } = req.body;
+    const reqCode = Object.values(req.body).toString();
+    if (reqCode === Key.adminKey) {
+      const user = await User.findByIdAndUpdate(
         {
           _id: req.params.userId
         },
         {
-          $set: req.body,
-          $set:{"Admin": true}
+          $set: { Admin: true, Code: Code }
         },
         {
           new: true
@@ -34,8 +35,24 @@ AdminRoutes.route("/:userId")
       } catch (err) {
         res.status(401).send(err);
       }
-    }else{
-      console.log(`${reqCode} is wrong password`)
+    } else {
+      const user = await User.findByIdAndUpdate(
+        {
+          _id: req.params.userId
+        },
+        {
+          $set: req.body
+        },
+        {
+          new: true
+        }
+      );
+      try {
+        const saved = await user.save();
+        res.send(saved);
+      } catch (err) {
+        res.status(401).send(err);
+      }
     }
   });
 

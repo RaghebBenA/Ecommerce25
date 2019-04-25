@@ -128,7 +128,9 @@ const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
                 size="small"
                 onClick={() => {
                   postPurchase(Purchase(soldCars, total, auth), history);
+                 setTimeout(()=>{
                   setEmpty(soldCars.splice(0, soldCars.length));
+                 },2000)
                 }}
               >
                 Buy Now

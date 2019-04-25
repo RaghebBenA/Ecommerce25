@@ -17,11 +17,13 @@ import CarNew from "./CMS/NewCar";
 import AdminPage from "./CMS/AdminLandingpage";
 import RootCarDetails from "./CMS/rootCarDetails";
 import RootProducts from "./CMS/rootProudct";
+import CurrentUser from "./user/user";
+import PurchaseDashboard from "./CMS/purchaseDashboard";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { purchase: [], Admin: false };
+    this.state = { purchase: [], Admin: false, Id: 0 , ui: null};
   }
 
   componentDidMount() {
@@ -31,7 +33,9 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.auth !== nextProps.auth) {
       this.setState({
-        Admin: nextProps.auth["Admin"]
+        Admin: nextProps.auth["Admin"],
+        Id: nextProps.auth["_id"],
+        ui: nextProps.auth
       });
     }
   }
@@ -54,16 +58,12 @@ class App extends Component {
                     className="btn btn-light"
                     style={{ borderRadius: "50%" }}
                     onClick={() => {
-                      this.setState = {
-                        purchase: this.state.purchase.push({
-                          name,
-                          _id,
-                          price,
-                          image,
-                          carMaker,
-                          Carvin
-                        })
-                      };
+                      this.setState((prevState) => ({
+                        purchase: [
+                          ...prevState.purchase,
+                          { name, _id, price, image, carMaker, Carvin }
+                        ]
+                      }));
                     }}
                   >
                     <i className="medium material-icons">local_grocery_store</i>
@@ -82,6 +82,7 @@ class App extends Component {
   }
 
   renderContent() {
+    const id = this.state.Id;
     switch (this.props.auth) {
       case null:
         return;
@@ -128,7 +129,9 @@ class App extends Component {
               style={{ color: "white", marginTop: "7px" }}
             >
               <Dropdown.Menu direction="left">
-                <Dropdown.Item text={this.props.auth.User} />
+                <Dropdown.Item>
+                  <Link to={`/${id}`}>{this.props.auth.User} </Link>
+                </Dropdown.Item>
                 <Dropdown.Item>
                   <a
                     href="/api/logout"
@@ -148,9 +151,9 @@ class App extends Component {
       <div className="sidenav" style={style}>
         <span className="closebtn">Admin Page</span>
         <Link to="/">Main page</Link>
-        <Link to="/rootList" >Product</Link>
+        <Link to="/rootList">Product</Link>
         <Link>Users</Link>
-        <Link>Purchase</Link>
+        <Link to="/requests">Purchase</Link>
       </div>
     );
   }
@@ -220,6 +223,12 @@ class App extends Component {
                         component={RootCarDetails}
                       />
                       <Route exact path="/New" component={CarNew} />
+                      <Route
+                        exact
+                        path="/requests"
+                        component={PurchaseDashboard}
+                      />
+                      <Route exact path="/:userId" component={CurrentUser} />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>
@@ -264,6 +273,7 @@ class App extends Component {
                         component={CarDetails}
                       />
                       <Route exact path="/New" component={CarNew} />
+                      <Route exact path="/:userId" component={CurrentUser} />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>
