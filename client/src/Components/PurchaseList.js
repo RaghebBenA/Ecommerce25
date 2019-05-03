@@ -9,7 +9,6 @@ import { withRouter, Link } from "react-router-dom";
 
 const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
   const [sold, setEmpty] = useState(soldCars);
-
   let prices = [];
   let total = 0;
   const Mapping = sold.map(({ _id, name, price, image, Carvin }) => {
@@ -84,7 +83,19 @@ const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
                   congue felis in faucibus.
                 </p>
               </Col>
+             
             </Row>
+            <Button
+            onClick={() => {
+              let a = soldCars.filter((e)=>{
+               return  e = _id
+              })
+              setEmpty(soldCars.splice(a,1))
+            }}
+            className="float-left"
+          >
+            Delete
+          </Button>
           </Row>
         </div>
       </div>

@@ -3,7 +3,7 @@ import UserFields from "./updateUserF";
 import { reduxForm, Field } from "redux-form";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../../redux/actions";
+import * as actions from "../../../redux/actions";
 import { Button, Icon } from "semantic-ui-react";
 
 let UpdateUser = ({
@@ -20,9 +20,6 @@ let UpdateUser = ({
       <form
         onSubmit={handleSubmit((values) => {
           updateUser(UserId, values, history);
-          setTimeout(()=>{
-            window.location.reload()
-          },3000)
         })}
       >
         <Field component={UserFields} type="text" name={name} values={value} />

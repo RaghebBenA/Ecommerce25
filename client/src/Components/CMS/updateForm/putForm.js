@@ -36,7 +36,7 @@ class UpdateCar extends Component {
         >
           {this.renderFields()}
          <Button.Group size="mini">
-          <Link to={`/product/${this.props.carId}`}>
+          <Link to={`/rootlist/${this.props.carId}`}>
         <Button  >
             <Icon
             name="cancel"

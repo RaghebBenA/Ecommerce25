@@ -4,7 +4,7 @@ import { FETCH_CARS } from "./types";
 import { FETCH_ONECAR } from "./types";
 import { DELETE_ONECAR } from "./types";
 import { UPDATE_ONECAR } from "./types";
-import { UPDATE_USER, FETCH_PURCH } from "./types";
+import { UPDATE_USER, FETCH_PURCH ,FETCH_ONEUSER,ADD_PURCHASE} from "./types";
 
 export const fecthUser = () => async (dispatch) => {
   const res = await axios.get("api/current_user");
@@ -13,13 +13,13 @@ export const fecthUser = () => async (dispatch) => {
 
 export const fecthOneUser = (userId) => async (dispatch) => {
   const res = await axios.get(`/api/user/${userId}`);
-  dispatch({ type: FETCH_USER, payload: res.data });
+  dispatch({ type: FETCH_ONEUSER, payload: res.data });
 };
 
 export const updateUser = (userId, values, history) => async (dispatch) => {
   const res = await axios.put(`/api/user/${userId}`, values);
 
-  history.push(`/${userId}`);
+  history.push(`/`);
 
   dispatch({ type: UPDATE_USER, payload: res.data });
 };
@@ -61,3 +61,8 @@ export const postPurchase = (values, history) => async (dispatch) => {
   history.push("/");
   dispatch({ type: FETCH_USER, payload: res.data });
 };
+
+export const addTopurchase = (car) => ({
+  type: ADD_PURCHASE,
+  payload: car
+})

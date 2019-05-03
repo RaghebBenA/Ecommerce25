@@ -1,57 +1,31 @@
 import React, { Component } from "react";
-import { fetchOneCar } from "../redux/actions";
+import { fetchOneCar,addTopurchase } from "../redux/actions";
 import { connect } from "react-redux";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import ReactImageMagnify from "react-image-magnify";
 import audi from "../Asset/audi.jpg";
 import { FadeTransform } from "react-animation-components";
 
 class CarDetails extends Component {
+  state = {
+    img: audi,
+    purchase: []
+  };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
+    this.props.addTopurchase()
   }
-  renderimg() {
-    const { name, image } = this.props.Onecar;
-    if (!this.props.Onecar) {
-      return (
-        <ReactImageMagnify
-          {...{
-            smallImage: {
-              alt: name,
-              isFluidWidth: true,
-              src: audi
-            },
-            largeImage: {
-              src: audi,
-              width: 1200,
-              height: 450
-            },
-            lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
-          }}
-        />
-      );
-    } else {
-      return (
-        <ReactImageMagnify
-          {...{
-            smallImage: {
-              alt: name,
-              isFluidWidth: true,
-              src: image
-            },
-            largeImage: {
-              src: image,
-              width: 1200,
-              height: 450
-            },
-            lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
-          }}
-        />
-      );
+  componentWillReceiveProps(nextProps) {
+    if (this.props.Onecar !== nextProps.Onecar) {
+      this.setState({
+        img: nextProps.Onecar.image
+      });
     }
   }
   render() {
+    const { img } = this.state;
     const { name, price, Carvin } = this.props.Onecar;
+    console.log(this.props.listPurchase,this.state.purchase)
     return (
       <FadeTransform
         in
@@ -69,7 +43,21 @@ class CarDetails extends Component {
           className="d-flex justify-content-center"
         >
           <Card style={{ width: "25rem" }} className="text-center">
-            {this.renderimg()}
+            <ReactImageMagnify
+              {...{
+                smallImage: {
+                  alt: name,
+                  isFluidWidth: true,
+                  src: img
+                },
+                largeImage: {
+                  src: img,
+                  width: 1200,
+                  height: 450
+                },
+                lensStyle: { backgroundColor: "rgba(0,0,0,.6)" }
+              }}
+            />
             <Card.Body>
               <Card.Title>{name}</Card.Title>
               <Card.Subtitle>{price}</Card.Subtitle>
@@ -81,6 +69,20 @@ class CarDetails extends Component {
                 condimentum nunc ac nisi vulputate fringilla. Donec lacinia
                 congue felis in faucibus
               </Card.Text>
+              <Button
+              onClick={() => {
+                this.setState((prevState) => ({
+                  purchase: [
+                    ...prevState.purchase,
+                    this.props.Onecar
+                  ],
+                }));
+            
+              }}
+                className="float-right"
+              >
+                Buy Now
+              </Button>
             </Card.Body>
           </Card>
         </div>
@@ -89,9 +91,9 @@ class CarDetails extends Component {
   }
 }
 
-const mapStateToprops = ({ Onecar }) => ({ Onecar });
+const mapStateToprops = ({ Onecar,listPurchase }) => ({ Onecar,listPurchase });
 
 export default connect(
   mapStateToprops,
-  { fetchOneCar }
+  { fetchOneCar,addTopurchase }
 )(CarDetails);

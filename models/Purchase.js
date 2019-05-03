@@ -8,7 +8,7 @@ const PurchaseSechma = new Schema({
     Products: [CarsSchema],
     Total: Number,
     User:  UsersChema,
-    Date: Date
+    PurchaseDate: Date
 }) 
 
 mongoose.model("purchases",PurchaseSechma)

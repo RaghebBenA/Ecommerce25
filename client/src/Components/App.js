@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route, NavLink, Link } from "react-router-dom";
 import * as actions from "../redux/actions";
 import { connect } from "react-redux";
-import { Nav, Button } from "react-bootstrap";
+import { Nav, Button,OverlayTrigger, Tooltip,Badge } from "react-bootstrap";
 import { Dropdown, Divider } from "semantic-ui-react";
 import _ from "lodash";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -17,13 +17,14 @@ import CarNew from "./CMS/NewCar";
 import AdminPage from "./CMS/AdminLandingpage";
 import RootCarDetails from "./CMS/rootCarDetails";
 import RootProducts from "./CMS/rootProudct";
-import CurrentUser from "./user/user";
+import CurrentUser from "./CMS/Rootuser/user";
 import PurchaseDashboard from "./CMS/purchaseDashboard";
+import StateUser from "./user/user"
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { purchase: [], Admin: false, Id: 0 , ui: null};
+    this.state = { purchase: [], Admin: false, Id: 0 , ui: null,count: 0};
   }
 
   componentDidMount() {
@@ -38,6 +39,7 @@ class App extends Component {
         ui: nextProps.auth
       });
     }
+
   }
   renderCars() {
     return _.map(
@@ -53,8 +55,21 @@ class App extends Component {
                   <p>{carMaker}</p>
                 </figure>
                 <figure className="back">
-                  <h1>{price}</h1>
+                  <h1>${price}</h1>
+                  {this.props.auth["address"] === "Address" || !this.props.auth ?
+                  <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">
+                  You should Login and fill your Account inforamation first
+                  </Tooltip>}>
                   <button
+                  className="btn btn-light disabled"
+                  style={{ borderRadius: "50%" }}
+                 
+                >
+                  <i className="medium material-icons">local_grocery_store</i>
+                </button> 
+                </OverlayTrigger>
+                :
+                    <button
                     className="btn btn-light"
                     style={{ borderRadius: "50%" }}
                     onClick={() => {
@@ -62,12 +77,14 @@ class App extends Component {
                         purchase: [
                           ...prevState.purchase,
                           { name, _id, price, image, carMaker, Carvin }
-                        ]
+                        ],
+                        count: prevState.count + 1 
                       }));
+                    
                     }}
                   >
                     <i className="medium material-icons">local_grocery_store</i>
-                  </button>
+                  </button>}
                   <Divider horizontal>Or</Divider>
                   <Link to={`/product/${_id}`}>
                     <Button variant="info">More Details</Button>
@@ -121,7 +138,9 @@ class App extends Component {
               }}
               className="mr-3 mt-2"
             >
-              Purchase
+            <Badge style={{backgroundColor:"#FFF8E1",color:"black"}}>
+            {this.state.purchase ? this.state.count : 0}
+            </Badge>Purchase
               <i className="small material-icons">local_grocery_store</i>{" "}
             </NavLink>{" "}
             <Dropdown
@@ -130,7 +149,7 @@ class App extends Component {
             >
               <Dropdown.Menu direction="left">
                 <Dropdown.Item>
-                  <Link to={`/${id}`}>{this.props.auth.User} </Link>
+                  <Link to={`/user/${id}`}>{this.props.auth.User} </Link>
                 </Dropdown.Item>
                 <Dropdown.Item>
                   <a
@@ -173,6 +192,13 @@ class App extends Component {
         </div>
       );
     };
+    const UserInteferce = () =>{
+      if(!this.props.auth) {
+        return <Route exact path="/user/:userId" component={Loading} />
+      } 
+      return   <Route exact path="/user/:userId" component={StateUser} />
+    }
+
     const sideNavOpen = {
       width: "250px"
     };
@@ -211,11 +237,6 @@ class App extends Component {
                           />
                         )}
                       />
-                      <Route
-                        exact
-                        path="/product/:carId"
-                        component={CarDetails}
-                      />
                       <Route exact path="/rootlist" component={RootProducts} />
                       <Route
                         exact
@@ -228,7 +249,7 @@ class App extends Component {
                         path="/requests"
                         component={PurchaseDashboard}
                       />
-                      <Route exact path="/:userId" component={CurrentUser} />
+                      <Route exact path="/requests/:userId" component={CurrentUser} />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>
@@ -264,6 +285,7 @@ class App extends Component {
                           <Purchaselist
                             soldCars={this.state.purchase}
                             auth={this.props.auth}
+                  
                           />
                         )}
                       />
@@ -273,7 +295,7 @@ class App extends Component {
                         component={CarDetails}
                       />
                       <Route exact path="/New" component={CarNew} />
-                      <Route exact path="/:userId" component={CurrentUser} />
+                      <UserInteferce />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>
@@ -286,7 +308,8 @@ class App extends Component {
   }
 
   render() {
-    return <div> {this.mainRender()}</div>;
+
+    return <div>{this.props.Cars ? <div> {this.mainRender()}</div> : <Loading />}</div>
   }
 }
 

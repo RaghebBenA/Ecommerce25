@@ -6,16 +6,20 @@ import deleteCarReducer from "./deleteCarReducer"
 import updateCarReducer from "./updateCarReducer"
 import updateUserReducer from "./adminReducer"
 import purchaseReducer from "./purchaseReducer"
+import fetchSingleUser from "./singleUserRoutes"
+import purchaseList from "./purchase/purchaseRed"
 import { reducer as reduxForm } from 'redux-form';
 
  
 export default combineReducers({
     auth: authReducer,
     admin: updateUserReducer,
+    singleuser: fetchSingleUser,
     form:  reduxForm,
     Cars: carReducer,
     Onecar : oneCarReducer,
     CarRm: deleteCarReducer,
     CarPut: updateCarReducer,
-    purchase: purchaseReducer
+    purchase: purchaseReducer,
+    listPurchase: purchaseList
 })

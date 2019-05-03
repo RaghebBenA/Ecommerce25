@@ -14,7 +14,7 @@ module.exports = (app) =>{
             Products,
             Total,
             User: req.user,
-            Date: Date.now()
+            PurchaseDate: Date.now()
         })
         try{
             const save = list.save()
