@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { fetchOneCar,addTopurchase } from "../redux/actions";
+import { fetchOneCar,addTopurchase,increamentCount } from "../redux/actions";
 import { connect } from "react-redux";
 import { Card, Button } from "react-bootstrap";
 import ReactImageMagnify from "react-image-magnify";
@@ -13,7 +13,7 @@ class CarDetails extends Component {
   };
   componentDidMount() {
     this.props.fetchOneCar(this.props.match.params.carId);
-    this.props.addTopurchase()
+    
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.Onecar !== nextProps.Onecar) {
@@ -22,10 +22,10 @@ class CarDetails extends Component {
       });
     }
   }
+
   render() {
     const { img } = this.state;
     const { name, price, Carvin } = this.props.Onecar;
-    console.log(this.props.listPurchase,this.state.purchase)
     return (
       <FadeTransform
         in
@@ -71,13 +71,8 @@ class CarDetails extends Component {
               </Card.Text>
               <Button
               onClick={() => {
-                this.setState((prevState) => ({
-                  purchase: [
-                    ...prevState.purchase,
-                    this.props.Onecar
-                  ],
-                }));
-            
+                this.props.increamentCount()
+                this.props.addTopurchase(this.props.Onecar)
               }}
                 className="float-right"
               >
@@ -95,5 +90,5 @@ const mapStateToprops = ({ Onecar,listPurchase }) => ({ Onecar,listPurchase });
 
 export default connect(
   mapStateToprops,
-  { fetchOneCar,addTopurchase }
+  { fetchOneCar,addTopurchase,increamentCount }
 )(CarDetails);

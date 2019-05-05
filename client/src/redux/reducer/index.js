@@ -8,6 +8,7 @@ import updateUserReducer from "./adminReducer"
 import purchaseReducer from "./purchaseReducer"
 import fetchSingleUser from "./singleUserRoutes"
 import purchaseList from "./purchase/purchaseRed"
+import countReducer from "./purchase/countReducer"
 import { reducer as reduxForm } from 'redux-form';
 
  
@@ -21,5 +22,6 @@ export default combineReducers({
     CarRm: deleteCarReducer,
     CarPut: updateCarReducer,
     purchase: purchaseReducer,
-    listPurchase: purchaseList
+    listPurchase: purchaseList,
+    count: countReducer
 })

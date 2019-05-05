@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Switch, Route, NavLink, Link } from "react-router-dom";
 import * as actions from "../redux/actions";
 import { connect } from "react-redux";
-import { Nav, Button,OverlayTrigger, Tooltip,Badge } from "react-bootstrap";
+import { Nav, Button, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
 import { Dropdown, Divider } from "semantic-ui-react";
 import _ from "lodash";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -19,12 +19,20 @@ import RootCarDetails from "./CMS/rootCarDetails";
 import RootProducts from "./CMS/rootProudct";
 import CurrentUser from "./CMS/Rootuser/user";
 import PurchaseDashboard from "./CMS/purchaseDashboard";
-import StateUser from "./user/user"
+import StateUser from "./user/user";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { purchase: [], Admin: false, Id: 0 , ui: null,count: 0};
+    this.state = {
+      Admin: false,
+      Id: 0,
+      ui: null,
+      Style: {
+        backgroundColor: "#FFF8E1",
+        color: "black"
+      }
+    };
   }
 
   componentDidMount() {
@@ -39,8 +47,8 @@ class App extends Component {
         ui: nextProps.auth
       });
     }
-
   }
+
   renderCars() {
     return _.map(
       this.props.Cars,
@@ -56,35 +64,46 @@ class App extends Component {
                 </figure>
                 <figure className="back">
                   <h1>${price}</h1>
-                  {this.props.auth["address"] === "Address" || !this.props.auth ?
-                  <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">
-                  You should Login and fill your Account inforamation first
-                  </Tooltip>}>
-                  <button
-                  className="btn btn-light disabled"
-                  style={{ borderRadius: "50%" }}
-                 
-                >
-                  <i className="medium material-icons">local_grocery_store</i>
-                </button> 
-                </OverlayTrigger>
-                :
+                  {this.props.auth["address"] === "Address" ||
+                  !this.props.auth ? (
+                    <OverlayTrigger
+                      overlay={
+                        <Tooltip id="tooltip-disabled">
+                          You should Login and fill your Account inforamation
+                          first
+                        </Tooltip>
+                      }
+                    >
+                      <button
+                        className="btn btn-light disabled"
+                        style={{ borderRadius: "50%" }}
+                      >
+                        <i className="medium material-icons">
+                          local_grocery_store
+                        </i>
+                      </button>
+                    </OverlayTrigger>
+                  ) : (
                     <button
-                    className="btn btn-light"
-                    style={{ borderRadius: "50%" }}
-                    onClick={() => {
-                      this.setState((prevState) => ({
-                        purchase: [
-                          ...prevState.purchase,
-                          { name, _id, price, image, carMaker, Carvin }
-                        ],
-                        count: prevState.count + 1 
-                      }));
-                    
-                    }}
-                  >
-                    <i className="medium material-icons">local_grocery_store</i>
-                  </button>}
+                      className="btn btn-light"
+                      style={{ borderRadius: "50%" }}
+                      onClick={() => {
+                        this.props.increamentCount();
+                        this.props.addTopurchase({
+                          name,
+                          _id,
+                          price,
+                          image,
+                          carMaker,
+                          Carvin
+                        });
+                      }}
+                    >
+                      <i className="medium material-icons">
+                        local_grocery_store
+                      </i>
+                    </button>
+                  )}
                   <Divider horizontal>Or</Divider>
                   <Link to={`/product/${_id}`}>
                     <Button variant="info">More Details</Button>
@@ -99,7 +118,9 @@ class App extends Component {
   }
 
   renderContent() {
+    let COUNT = parseInt(Object.values(this.props.count));
     const id = this.state.Id;
+
     switch (this.props.auth) {
       case null:
         return;
@@ -138,11 +159,17 @@ class App extends Component {
               }}
               className="mr-3 mt-2"
             >
-            <Badge style={{backgroundColor:"#FFF8E1",color:"black"}}>
-            {this.state.purchase ? this.state.count : 0}
-            </Badge>Purchase
+              <Badge
+                style={{
+                  backgroundColor: COUNT !== 0 ? "red" : "#FFF8E1",
+                  color: COUNT !== 0 ? "white" : "black"
+                }}
+              >
+                {parseInt(Object.values(this.props.count))}
+              </Badge>
+              Purchase
               <i className="small material-icons">local_grocery_store</i>{" "}
-            </NavLink>{" "}
+            </NavLink>
             <Dropdown
               text="Account"
               style={{ color: "white", marginTop: "7px" }}
@@ -192,12 +219,12 @@ class App extends Component {
         </div>
       );
     };
-    const UserInteferce = () =>{
-      if(!this.props.auth) {
-        return <Route exact path="/user/:userId" component={Loading} />
-      } 
-      return   <Route exact path="/user/:userId" component={StateUser} />
-    }
+    const UserInteferce = () => {
+      if (!this.props.auth) {
+        return <Route exact path="/user/:userId" component={Loading} />;
+      }
+      return <Route exact path="/user/:userId" component={StateUser} />;
+    };
 
     const sideNavOpen = {
       width: "250px"
@@ -231,10 +258,7 @@ class App extends Component {
                         exact
                         path="/purchase"
                         component={() => (
-                          <Purchaselist
-                            soldCars={this.state.purchase}
-                            auth={this.props.auth}
-                          />
+                          <Purchaselist auth={this.props.auth} />
                         )}
                       />
                       <Route exact path="/rootlist" component={RootProducts} />
@@ -249,7 +273,11 @@ class App extends Component {
                         path="/requests"
                         component={PurchaseDashboard}
                       />
-                      <Route exact path="/requests/:userId" component={CurrentUser} />
+                      <Route
+                        exact
+                        path="/requests/:userId"
+                        component={CurrentUser}
+                      />
                     </Switch>
                   </CSSTransition>
                 </TransitionGroup>
@@ -282,11 +310,7 @@ class App extends Component {
                         exact
                         path="/purchase"
                         component={() => (
-                          <Purchaselist
-                            soldCars={this.state.purchase}
-                            auth={this.props.auth}
-                  
-                          />
+                          <Purchaselist auth={this.props.auth} />
                         )}
                       />
                       <Route
@@ -308,13 +332,16 @@ class App extends Component {
   }
 
   render() {
-
-    return <div>{this.props.Cars ? <div> {this.mainRender()}</div> : <Loading />}</div>
+    return (
+      <div>
+        {this.props.Cars ? <div> {this.mainRender()}</div> : <Loading />}
+      </div>
+    );
   }
 }
 
-function mapStateToProps({ auth, Cars }) {
-  return { auth, Cars };
+function mapStateToProps({ auth, Cars, listPurchase, count }) {
+  return { auth, Cars, listPurchase, count };
 }
 
 export default connect(

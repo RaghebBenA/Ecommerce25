@@ -1,14 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import ReactImageMagnify from "react-image-magnify";
 import { Total, Purchase } from "./PurchaseStructure";
 import { connect } from "react-redux";
-import { postPurchase } from "../redux/actions";
+import {
+  postPurchase,
+  addTopurchase,
+  deletePurchase,
+  deleteAllPurchase,
+  decrementCount,
+  resetCount
+} from "../redux/actions";
 import { Button } from "semantic-ui-react";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
-const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
-  const [sold, setEmpty] = useState(soldCars);
+const Purchaselist = ({
+  postPurchase,
+  auth,
+  history,
+  listPurchase,
+  deletePurchase,
+  deleteAllPurchase,
+  decrementCount,
+  resetCount
+}) => {
+  const [sold, setEmpty] = useState([]);
+  useEffect(() => {
+    setEmpty(listPurchase.arr);
+  }, []);
   let prices = [];
   let total = 0;
   const Mapping = sold.map(({ _id, name, price, image, Carvin }) => {
@@ -83,19 +102,16 @@ const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
                   congue felis in faucibus.
                 </p>
               </Col>
-             
             </Row>
             <Button
-            onClick={() => {
-              let a = soldCars.filter((e)=>{
-               return  e = _id
-              })
-              setEmpty(soldCars.splice(a,1))
-            }}
-            className="float-left"
-          >
-            Delete
-          </Button>
+              onClick={() => {
+                deletePurchase(_id);
+                decrementCount()
+              }}
+              className="float-left"
+            >
+              Delete
+            </Button>
           </Row>
         </div>
       </div>
@@ -124,24 +140,24 @@ const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
           >
             <h1 style={{ color: "white" }}>Total: {total}</h1>
             <Button.Group>
-              <Link to="/">
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setEmpty(soldCars.splice(0, soldCars.length));
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Link>
+              <Button
+                size="small"
+                onClick={() => {
+                  deleteAllPurchase(listPurchase);
+                  resetCount()
+                }}
+              >
+                Cancel
+              </Button>
+
               <Button.Or />
               <Button
                 size="small"
                 onClick={() => {
-                  postPurchase(Purchase(soldCars, total, auth), history);
-                 setTimeout(()=>{
-                  setEmpty(soldCars.splice(0, soldCars.length));
-                 },2000)
+                  postPurchase(Purchase(sold, total, auth), history);
+                  setTimeout(() => {
+                    deleteAllPurchase(listPurchase);
+                  }, 2000);
                 }}
               >
                 Buy Now
@@ -156,11 +172,11 @@ const Purchaselist = ({ soldCars, postPurchase, auth, history }) => {
   );
 };
 
-function mapSatateToProps({ auth }) {
-  return { auth };
+function mapSatateToProps({ auth, listPurchase }) {
+  return { auth, listPurchase };
 }
 
 export default connect(
   mapSatateToProps,
-  { postPurchase }
+  { postPurchase, addTopurchase, deletePurchase, deleteAllPurchase,decrementCount,resetCount }
 )(withRouter(Purchaselist));

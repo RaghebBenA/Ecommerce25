@@ -8,7 +8,6 @@ import { Input } from "semantic-ui-react";
 import FIELDS from "./formFields";
 
 const CarformReview = ({ onCancel, formValues, postCar, history }) => {
-  console.log(formValues);
   const reviewFrom = _.map(FIELDS, ({ label, name }) => {
     return (
       <div key={name}>
